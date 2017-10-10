@@ -54,7 +54,6 @@ func (t *StressTest) createDeleteContainers(ctx context.Context, id, loopCount i
 	for i := 0; i < loopCount; i++ {
 
 		ctr, err := t.Runtime.Create(ctx, testContainerName+"-"+strconv.Itoa(id+1020)+"-"+strconv.Itoa(i+1010), testImage, nil)
-		//ctr, err := t.Runtime.Create(ctx, containerName, imageName, specs)
 		if err != nil {
 			log.Error(err)
 			return err

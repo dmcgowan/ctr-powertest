@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"syscall"
+	"time"
 
 	"github.com/containerd/containerd"
 	"github.com/kunalkushwaha/ctr-powertest/libruntime"
@@ -83,11 +84,13 @@ func (cr *ContainerdRuntime) Delete(ctx context.Context, ctr *libruntime.Contain
 	if err != nil {
 		return err
 	}
-
+	startTime := time.Now()
 	err = container.Delete(ctx, containerd.WithSnapshotCleanup)
 	if err != nil {
 		return err
 	}
+	totalTime := time.Now().Sub(startTime)
+	log.Infof("Container Delete time %s ", totalTime.String())
 	return nil
 }
 
@@ -121,7 +124,7 @@ func (cr *ContainerdRuntime) Start(ctx context.Context, ctr *libruntime.Containe
 	if err != nil {
 		return err
 	}
-
+	startTime := time.Now()
 	task, err := container.Task(ctx, nil)
 	if err == nil {
 		status, _ := task.Status(ctx)
@@ -134,6 +137,8 @@ func (cr *ContainerdRuntime) Start(ctx context.Context, ctr *libruntime.Containe
 			return fmt.Errorf("Task Start : %v ", err)
 		}
 	}
+	totalTime := time.Now().Sub(startTime)
+	log.Infof("Container Start time %s ", totalTime.String())
 	return err
 }
 
@@ -144,7 +149,7 @@ func (cr *ContainerdRuntime) Stop(ctx context.Context, ctr *libruntime.Container
 	if err != nil {
 		return err
 	}
-
+	startTime := time.Now()
 	task, err := container.Task(ctx, nil)
 	if err != nil {
 		return err
@@ -192,7 +197,8 @@ func (cr *ContainerdRuntime) Stop(ctx context.Context, ctr *libruntime.Container
 	default:
 		return fmt.Errorf("Undefined Task state %v ", status)
 	}
-
+	totalTime := time.Now().Sub(startTime)
+	log.Infof("Container Stop time %s ", totalTime.String())
 	return nil
 }
 
@@ -209,12 +215,14 @@ func (cr *ContainerdRuntime) Create(ctx context.Context, containerName, imageNam
 		}
 	}
 
+	startTime := time.Now()
 	//Create new container.
 	_, err = cr.cclient.NewContainer(ctx, containerName, containerd.WithSpec(specs), containerd.WithNewSnapshot(containerName, image))
 	if err != nil {
 		return nil, fmt.Errorf("Error in Container Creation : %v", err)
 	}
-
+	totalTime := time.Now().Sub(startTime)
+	log.Infof("Container Create time %s ", totalTime.String())
 	return &libruntime.Container{ID: containerName}, nil
 }
 

@@ -24,8 +24,6 @@ type Image struct {
 }
 
 type Runtime interface {
-	//	NewServer(RuntimeConfig)
-	//	GetClient(string, string) (Runtime, error)
 	Version(context.Context) string
 	Pull(context.Context, string) (Image, error)
 	Create(context context.Context, containerName string, imageName string, OCISpecs *specs.Spec) (*Container, error)

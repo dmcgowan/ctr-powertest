@@ -30,13 +30,6 @@ var ctrRuntime libruntime.Runtime
 var RootCmd = &cobra.Command{
 	Use:   "ctr-powertest",
 	Short: "container runtime testing tool",
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	Run: func(cmd *cobra.Command, args []string) {
-
-		//Run tests with new  server instance
-
-	},
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
